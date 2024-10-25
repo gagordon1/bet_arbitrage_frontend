@@ -102,13 +102,17 @@ const BetOpportunity: React.FC<BetOpportunityProps> = ({
 // Styled Components using the forest-inspired color scheme
 const Container = styled.div`
   flex-basis: 48%;
-  margin-bottom: 20px;
-  padding: 15px;
+  padding: 5px;
   position: relative;
   border: 1px solid #8b8b83;
   background-color: #eef1f2;  /* Soft white */
   color: #2d4030;  /* Dark forest green */
   box-sizing: border-box;
+  
+  display: flex;
+  flex-direction: column;  /* Stack the children vertically */
+  justify-content: space-between;  /* Ensure space is distributed evenly */
+  height: 100%;  /* Full height */
 
   /* Media query for responsiveness */
   @media (max-width: 768px) {
@@ -121,7 +125,7 @@ const DeleteButton = styled.span`
   top: 10px;
   right: 10px;
   color: red;  /* Red text color */
-  font-size: 1.5rem;
+  font-size: 0.8rem;
   cursor: pointer;
 
   &:hover {
@@ -131,43 +135,46 @@ const DeleteButton = styled.span`
 
 
 const Title = styled.h3`
-  margin-bottom: 15px;
+  height: 80px;
   color: #2d4030;  /* Dark forest green */
+  justify-content: left;
 `;
 
 const MarketContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;  /* Optional: Add space between market container and table */
 `;
 
 const ReturnTable = styled.table`
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse;  /* Ensure the borders collapse nicely */
   margin-top: 10px;
-
-  th,
-  td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #8b8b83;
-  }
+  flex-grow: 0;
 `;
 
 const TableHeader = styled.th`
   color: #4d5e50;  /* Muted gray-green */
   font-weight: bold;
+  border-bottom: 1px solid #8b8b83;  /* Add border to the header cells */
+  padding: 10px;
 `;
 
-const TableRow = styled.tr``;
+const TableRow = styled.tr`
+  border-bottom: 1px solid #8b8b83;  /* Add border to the row */
+`;
 
 const TableCell = styled.td`
   color: #2d4030;  /* Dark forest green */
+  padding: 10px;
+  border-bottom: 1px solid #8b8b83;  /* Add border to each cell */
 `;
+
 
 const LastUpdate = styled.p`
   font-size: 0.9em;
   color: #55675b;  /* Muted gray */
-  margin-top: 10px;
+  margin-top: 20px;
 `;
 
 export default BetOpportunity;

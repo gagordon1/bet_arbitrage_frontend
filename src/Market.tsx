@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 // Define the structure of the market props
@@ -19,28 +19,44 @@ const Market: React.FC<MarketProps> = ({
   no_bid,
   question,
 }) => {
+  // State to control whether the question is shown
+  const [showQuestion, setShowQuestion] = useState(false);
+
+  // Toggle the visibility of the question when the platform name is clicked
+  const handleToggleQuestion = () => {
+    setShowQuestion(!showQuestion);
+  };
+
   return (
     <MarketContainer>
-      <Platform>{platform}</Platform>
-      <QuestionContainer>
-        <Question><strong>Question:</strong> {question}</Question>
-      </QuestionContainer>
+      {/* Clicking the platform name toggles the question */}
+      <Platform onClick={handleToggleQuestion}>
+        {platform}
+      </Platform>
+
+      {/* Show the question box only if showQuestion is true */}
+      {showQuestion && (
+        <QuestionBox>
+          <Question>{question}</Question>
+        </QuestionBox>
+      )}
+
       <ContentContainer>
         <Row>
           <Label>Yes Ask:</Label>
-          <Value>{yes_ask}</Value>
+          <Value>${yes_ask.toFixed(2)}</Value>
         </Row>
         <Row>
           <Label>Yes Bid:</Label>
-          <Value>{yes_bid}</Value>
+          <Value>${yes_bid.toFixed(2)}</Value>
         </Row>
         <Row>
           <Label>No Ask:</Label>
-          <Value>{no_ask}</Value>
+          <Value>${no_ask.toFixed(2)}</Value>
         </Row>
         <Row>
           <Label>No Bid:</Label>
-          <Value>{no_bid}</Value>
+          <Value>${no_bid.toFixed(2)}</Value>
         </Row>
       </ContentContainer>
     </MarketContainer>
@@ -61,23 +77,30 @@ const MarketContainer = styled.div`
 `;
 
 const Platform = styled.h4`
-  margin-bottom: 10px;
+  height: 40px;
+  margin: 5px;
   font-size: 1.2em;
   color: #2d4030;  /* Dark green */
+  cursor: pointer;  /* Add pointer to indicate clickability */
+
+  &:hover {
+    text-decoration: underline;  /* Indicate hover state */
+  }
 `;
 
-const QuestionContainer = styled.div`
-  min-height: 50px;  /* Set minimum height to keep questions uniform */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
+const QuestionBox = styled.div`
+  border: 1px solid #4d5e50;  /* Muted gray-green */
+  background-color: #fff;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const Question = styled.p`
   font-size: 0.9em;
   color: #55675b;  /* Muted gray-green */
-  text-align: center;
+  margin: 0;
 `;
 
 const ContentContainer = styled.div`

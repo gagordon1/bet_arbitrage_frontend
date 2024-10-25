@@ -34,7 +34,7 @@ const BetOpportunities: React.FC = () => {
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [sortOption, setSortOption] = useState<string>("none"); // Sort option state
 
-  const resultsPerPage = 50;
+  const resultsPerPage = 48;
 
   // Fetch bet opportunities with sorting
   const fetchBetOpportunities = async (page: number, sort: string) => {
@@ -101,7 +101,7 @@ const BetOpportunities: React.FC = () => {
   };
 
   return (
-    <div>
+    <MainContainer>
       <HeaderContainer>
         <h1>Bet Opportunities</h1>
         <HeaderActions>
@@ -146,10 +146,15 @@ const BetOpportunities: React.FC = () => {
           </PaginationContainer>
         </>
       )}
-    </div>
+    </MainContainer>
   );
 };
 
+const MainContainer = styled.div`
+  max-width: 1400px; /* Maximum width for large screens */
+  margin: 0 auto; /* Center the content and apply equal margins */
+  padding: 0 20px; /* Add padding on the left and right for smaller screens */
+`;
 
 // Styled Components
 const HeaderContainer = styled.div`
@@ -191,12 +196,12 @@ const OpportunityGrid = styled.div`
   gap: 20px; /* Spacing between the items */
 
   /* Medium screens: 2 columns */
-  @media (min-width: 600px) {
+  @media (min-width: 800px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
   /* Large screens: 4 columns */
-  @media (min-width: 1024px) {
+  @media (min-width: 1200px) {
     grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
   }
 `;
