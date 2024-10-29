@@ -1,12 +1,15 @@
+// App.tsx
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 import BetOpportunities from "./BetOpportunities";
-import "./App.css";
+import BetOpportunityDetails from "./BetOpportunityDetails";
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <BetOpportunities />
-    </div>
+    <Routes>
+      <Route path="/" element={<BetOpportunities />} />
+      <Route path="/bet_opportunity/:id" element={<BetOpportunityDetails />} />
+    </Routes>
   );
 };
 

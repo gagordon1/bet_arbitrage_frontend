@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Market from "./Market";
 import axios from "axios";
-import { API_HOST_TEST } from "./Constants";  // Assuming you have an API host constant defined
+import { API_HOST_TEST } from "./Constants";
 
-// Define the structure of the market
 interface Market {
   id: string | null;
   no_ask: number;
@@ -17,15 +17,14 @@ interface Market {
   yes_id: string | null;
 }
 
-// Define the structure of a bet opportunity
 interface BetOpportunityProps {
-  id: string; // Adding an id to identify the bet opportunity
+  id: string;
   question: string;
   absolute_return: number[];
   last_update: string;
   market_1: Market;
   market_2: Market;
-  onDelete: (id: string) => void;  // Function to handle delete on parent
+  onDelete: (id: string) => void;
 }
 
 const BetOpportunity: React.FC<BetOpportunityProps> = ({
@@ -37,44 +36,33 @@ const BetOpportunity: React.FC<BetOpportunityProps> = ({
   market_2,
   onDelete,
 }) => {
-  // Format absolute returns as percentages with one decimal place
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const yesReturn = `${(absolute_return[0] * 100).toFixed(1)}%`;
   const noReturn = `${(absolute_return[1] * 100).toFixed(1)}%`;
 
-  // Handle delete request for this bet opportunity
   const handleDelete = async () => {
     try {
       await axios.delete(`${API_HOST_TEST}/bet_opportunities/${id}`);
-      onDelete(id);  // Call the parent handler to update the state after deletion
+      onDelete(id);
     } catch (err) {
       console.error("Error deleting bet opportunity", err);
     }
   };
 
+  // Navigate to the details page
+  const goToDetails = () => {
+    navigate(`/bet_opportunity/${id}`);
+  };
+
   return (
     <Container>
       <DeleteButton onClick={handleDelete}>X</DeleteButton>
-      <Title>{question}</Title>
-
+      <Title onClick={goToDetails}>{question}</Title> {/* Make the title clickable */}
       <MarketContainer>
-        <Market
-          platform={market_1.platform}
-          yes_ask={market_1.yes_ask}
-          yes_bid={market_1.yes_bid}
-          no_ask={market_1.no_ask}
-          no_bid={market_1.no_bid}
-          question={market_1.question}
-        />
-        <Market
-          platform={market_2.platform}
-          yes_ask={market_2.yes_ask}
-          yes_bid={market_2.yes_bid}
-          no_ask={market_2.no_ask}
-          no_bid={market_2.no_bid}
-          question={market_2.question}
-        />
+        <Market {...market_1} />
+        <Market {...market_2} />
       </MarketContainer>
-
       <ReturnTable>
         <thead>
           <tr>
@@ -93,12 +81,10 @@ const BetOpportunity: React.FC<BetOpportunityProps> = ({
           </TableRow>
         </tbody>
       </ReturnTable>
-
       <LastUpdate>Last Update: {new Date(last_update).toLocaleString()}</LastUpdate>
     </Container>
   );
 };
-
 // Styled Components using the forest-inspired color scheme
 const Container = styled.div`
   flex-basis: 48%;

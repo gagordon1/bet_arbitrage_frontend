@@ -32,7 +32,7 @@ const BetOpportunities: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
-  const [sortOption, setSortOption] = useState<string>("none"); // Sort option state
+  const [sortOption, setSortOption] = useState<string>("parity_return"); // Sort option state
 
   const resultsPerPage = 48;
 
