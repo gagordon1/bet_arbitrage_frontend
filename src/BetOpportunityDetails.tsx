@@ -1,14 +1,12 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
-import OrderBookChart from "./OrderBookChart"; // Import the chart component
+import OrderBookChart from "./OrderBookChart";
 import { API_HOST_TEST } from "./Constants";
 import { investmentCalculation, getEffectivePrice } from "./investmentCalculation";
 
-// Rest of the imports...
-
+// Interfaces
 export interface Order {
   price: number;
   size: number;
@@ -26,16 +24,30 @@ export interface MarketDetails {
   noOrderBook: MarketOrderBook;
 }
 
-// Styled components for a clean layout
+// Styled components for layout
 const Container = styled.div`
   padding: 20px;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
 `;
 
+const FlexContainer = styled.div`
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const HalfSection = styled.div`
+  flex: 1;
+  min-width: px;
+`;
+
 const Section = styled.div`
-  margin-bottom: 30px;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -73,6 +85,7 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 16px;
   margin-top: 15px;
+
   &:hover {
     background-color: #45a049;
   }
@@ -91,10 +104,6 @@ const EffectivePrice = styled.div`
   color: #2e7d32;
   font-weight: bold;
   text-align: center;
-`;
-
-const ChartSection = styled(Section)`
-  background-color: #f0f0ff;
 `;
 
 // BetOpportunityDetails Component
@@ -186,87 +195,94 @@ const BetOpportunityDetails: React.FC = () => {
         <p>Question: {market1?.question || market2?.question}</p>
       </Section>
 
-      {/* Investment Testing Section */}
-      <Section>
-        <h3>Investment Testing</h3>
-        <Label>Yes Contracts for Market 1:</Label>
-        <Input
-          type="number"
-          name="yesMarket1Contracts"
-          value={contracts.yesMarket1Contracts}
-          onChange={handleContractChange}
-        />
-        
-        <Label>No Contracts for Market 1:</Label>
-        <Input
-          type="number"
-          name="noMarket1Contracts"
-          value={contracts.noMarket1Contracts}
-          onChange={handleContractChange}
-        />
-        
-        <Label>Yes Contracts for Market 2:</Label>
-        <Input
-          type="number"
-          name="yesMarket2Contracts"
-          value={contracts.yesMarket2Contracts}
-          onChange={handleContractChange}
-        />
-        
-        <Label>No Contracts for Market 2:</Label>
-        <Input
-          type="number"
-          name="noMarket2Contracts"
-          value={contracts.noMarket2Contracts}
-          onChange={handleContractChange}
-        />
-        
-        <Button onClick={calculateReturns}>Calculate Investment Returns</Button>
+      <FlexContainer>
+        {/* Investment Testing Section */}
+        <HalfSection>
+          <Section>
+            <h3>Investment Testing</h3>
+            <Label>Yes Contracts for Market 1:</Label>
+            <Input
+              type="number"
+              name="yesMarket1Contracts"
+              value={contracts.yesMarket1Contracts}
+              onChange={handleContractChange}
+            />
+            
+            <Label>No Contracts for Market 1:</Label>
+            <Input
+              type="number"
+              name="noMarket1Contracts"
+              value={contracts.noMarket1Contracts}
+              onChange={handleContractChange}
+            />
+            
+            <Label>Yes Contracts for Market 2:</Label>
+            <Input
+              type="number"
+              name="yesMarket2Contracts"
+              value={contracts.yesMarket2Contracts}
+              onChange={handleContractChange}
+            />
+            
+            <Label>No Contracts for Market 2:</Label>
+            <Input
+              type="number"
+              name="noMarket2Contracts"
+              value={contracts.noMarket2Contracts}
+              onChange={handleContractChange}
+            />
+            
+            <Button onClick={calculateReturns}>Calculate Investment Returns</Button>
 
-        <ResultText>Return on Yes Contracts: {calculatedReturns.returnOnYes !== null ? `${(calculatedReturns.returnOnYes * 100).toFixed(2)}%` : 'N/A'}</ResultText>
-        <ResultText>Return on No Contracts: {calculatedReturns.returnOnNo !== null ? `${(calculatedReturns.returnOnNo * 100).toFixed(2)}%` : 'N/A'}</ResultText>
+            <ResultText>Return on Yes Contracts: {calculatedReturns.returnOnYes !== null ? `${(calculatedReturns.returnOnYes * 100).toFixed(2)}%` : 'N/A'}</ResultText>
+            <ResultText>Return on No Contracts: {calculatedReturns.returnOnNo !== null ? `${(calculatedReturns.returnOnNo * 100).toFixed(2)}%` : 'N/A'}</ResultText>
 
-        {/* Effective Prices */}
-        <EffectivePrice>
-          <p>Effective Price for Yes Contracts Market 1: {effectivePrices.yesMarket1Price !== null ? `$${effectivePrices.yesMarket1Price.toFixed(2)}` : 'N/A'}</p>
-          <p>Effective Price for No Contracts Market 1: {effectivePrices.noMarket1Price !== null ? `$${effectivePrices.noMarket1Price.toFixed(2)}` : 'N/A'}</p>
-          <p>Effective Price for Yes Contracts Market 2: {effectivePrices.yesMarket2Price !== null ? `$${effectivePrices.yesMarket2Price.toFixed(2)}` : 'N/A'}</p>
-          <p>Effective Price for No Contracts Market 2: {effectivePrices.noMarket2Price !== null ? `$${effectivePrices.noMarket2Price.toFixed(2)}` : 'N/A'}</p>
-        </EffectivePrice>
-      </Section>
+            {/* Effective Prices */}
+            <EffectivePrice>
+              <p>Effective Price for Yes Contracts Market 1: {effectivePrices.yesMarket1Price !== null ? `$${effectivePrices.yesMarket1Price.toFixed(2)}` : 'N/A'}</p>
+              <p>Effective Price for No Contracts Market 1: {effectivePrices.noMarket1Price !== null ? `$${effectivePrices.noMarket1Price.toFixed(2)}` : 'N/A'}</p>
+              <p>Effective Price for Yes Contracts Market 2: {effectivePrices.yesMarket2Price !== null ? `$${effectivePrices.yesMarket2Price.toFixed(2)}` : 'N/A'}</p>
+              <p>Effective Price for No Contracts Market 2: {effectivePrices.noMarket2Price !== null ? `$${effectivePrices.noMarket2Price.toFixed(2)}` : 'N/A'}</p>
+            </EffectivePrice>
+          </Section>
+        </HalfSection>
 
-      <ChartSection>
-        <h3>Market Asks Charts</h3>
-        <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-          {market1 && (
-            <div style={{ flex: 1 }}>
-              <h4>{market1.platform} - Yes Asks</h4>
-              <OrderBookChart orders={market1.yesOrderBook.asks} label="Yes Asks" color="rgba(75, 192, 75, 0.6)" />
+        {/* Market Asks Charts Section */}
+        <HalfSection>
+          <Section>
+            <h3>Market Asks Charts</h3>
+            <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
+              {market1 && (
+                <div style={{ flex: 1 }}>
+                  <h4>{market1.platform} - Yes Asks</h4>
+                  <OrderBookChart orders={market1.yesOrderBook.asks} label="Yes Asks" color="rgba(75, 192, 75, 0.6)" />
+                </div>
+              )}
+              {market2 && (
+                <div style={{ flex: 1 }}>
+                  <h4>{market2.platform} - Yes Asks</h4>
+                  <OrderBookChart orders={market2.yesOrderBook.asks} label="Yes Asks" color="rgba(75, 192, 75, 0.6)" />
+                </div>
+              )}
             </div>
-          )}
-          {market2 && (
-            <div style={{ flex: 1 }}>
-              <h4>{market2.platform} - Yes Asks</h4>
-              <OrderBookChart orders={market2.yesOrderBook.asks} label="Yes Asks" color="rgba(75, 192, 75, 0.6)" />
-            </div>
-          )}
-        </div>
 
-        <div style={{ display: "flex", gap: "20px" }}>
-          {market1 && (
-            <div style={{ flex: 1 }}>
-              <h4>{market1.platform} - No Asks</h4>
-              <OrderBookChart orders={market1.noOrderBook.asks} label="No Asks" color="rgba(255, 99, 132, 0.6)" />
+            <div style={{ display: "flex", gap: "20px" }}>
+              {market1 && (
+                <div style={{ flex: 1 }}>
+                  <h4>{market1.platform} - No Asks</h4>
+                  <OrderBookChart orders={market1.noOrderBook.asks} label="No Asks" color="rgba(255, 99, 132, 0.6)" />
+                </div>
+              )}
+              {market2 && (
+                <div style={{ flex: 1 }}>
+                  <h4>{market2.platform} - No Asks</h4>
+                  <OrderBookChart orders={market2.noOrderBook.asks} label="No Asks" color="rgba(255, 99, 132, 0.6)" />
+                </div>
+              )}
             </div>
-          )}
-          {market2 && (
-            <div style={{ flex: 1 }}>
-              <h4>{market2.platform} - No Asks</h4>
-              <OrderBookChart orders={market2.noOrderBook.asks} label="No Asks" color="rgba(255, 99, 132, 0.6)" />
-            </div>
-          )}
-        </div>
-      </ChartSection>
+          </Section>
+        </HalfSection>
+      </FlexContainer>
     </Container>
   );
 };

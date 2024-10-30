@@ -15,7 +15,7 @@ interface OrderBookChartProps {
 
 const OrderBookChart: React.FC<OrderBookChartProps> = ({ orders, label, color }) => {
   // Limit the orders to at most 10 entries
-  const limitedOrders = orders.slice(0, 10);
+  const limitedOrders = orders.slice(0, 5);
 
   const data = {
     labels: limitedOrders.map(order => order.price.toFixed(2)), // Using price as labels

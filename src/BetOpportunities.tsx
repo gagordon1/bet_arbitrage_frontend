@@ -15,11 +15,13 @@ interface Market {
   yes_ask: number;
   yes_bid: number;
   yes_id: string | null;
+  end_date: string;
 }
 
 interface BetOpportunityData {
   id: string;
   absolute_return: number[];
+  annualized_return : number[];
   last_update: string;
   market_1: Market;
   market_2: Market;
@@ -32,7 +34,7 @@ const BetOpportunities: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
-  const [sortOption, setSortOption] = useState<string>("parity_return"); // Sort option state
+  const [sortOption, setSortOption] = useState<string>("parity_return_annualized"); // Sort option state
 
   const resultsPerPage = 48;
 
@@ -90,8 +92,12 @@ const BetOpportunities: React.FC = () => {
   };
 
   // Handle delete from child component
-  const handleDelete = (id: string) => {
-    setBetData(betData.filter(bet => bet.id !== id)); // Remove the deleted bet from the state
+  const handleDelete = async (id: string) => {
+    // Remove the deleted bet from the state
+    setBetData(betData.filter(bet => bet.id !== id));
+    
+    // Re-fetch bet opportunities after delete to ensure data consistency
+    await fetchBetOpportunities(pageIndex, sortOption);
   };
 
   // Handle sort change
@@ -110,6 +116,7 @@ const BetOpportunities: React.FC = () => {
             <select id="sort" value={sortOption} onChange={handleSortChange}>
               <option value="none">None</option>
               <option value="parity_return">Return</option>
+              <option value="parity_return_annualized">Annualized Return</option>
             </select>
           </SortContainer>
           <RefreshButton onClick={refreshBetOpportunities}>Refresh</RefreshButton>
@@ -127,6 +134,7 @@ const BetOpportunities: React.FC = () => {
                 key={index}
                 id={bet.id}  // Pass the id down
                 question={bet.question}
+                annualized_return={bet.annualized_return}
                 absolute_return={bet.absolute_return}
                 last_update={bet.last_update}
                 market_1={bet.market_1}
